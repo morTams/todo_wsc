@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import {create, getAll, getById, update, deleteTodo} from './todos.service'
+import {create, getAll, getById, update, deleteTodo, getTodoListByUserId} from './todos.service'
 
 export async function getAllTodos(req: Request, res: Response) {
     try {
@@ -8,6 +8,16 @@ export async function getAllTodos(req: Request, res: Response) {
     }
     catch (err){
         res.status(404).send({ err: 'Error to get All Todos' })
+    }
+}
+export async function getTodoByUserId(req: Request, res: Response) {
+    try {
+        const userId = req.body
+        const todoList = await getTodoListByUserId(userId)
+        res.send(todoList)
+    }
+    catch (err){
+        res.status(404).send({ err: 'Error to get All Todos by user' })
     }
 }
 export async function getTodoById(req: Request, res: Response){

@@ -6,6 +6,8 @@ import { exampleRouter } from './api/example/example.routes'
 import {todoRouter} from "./api/todos/todos.routes";
 import {usersMiddleware} from "./middleware/users.middleware";
 import {usersRouter} from "./api/users/users.routes";
+import {authRouter} from "./api/auth/auth.routes";
+import {authMiddleware} from "./middleware/auth.middleware";
 
 const path = config.isProduction() ? '.env.prod' : '.env.dev'
 
@@ -24,8 +26,9 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use(express.json())
 app.use('/example', exampleRouter)
-app.use('/todos', todoRouter)
-app.use('/users', usersRouter)
+app.use('/auth', authRouter)
+app.use('/todos',authMiddleware, todoRouter)
+app.use('/users',authMiddleware, usersRouter)
 app.get('/', (request: Request, response: Response) => {
     response.status(200).send(`localhost:${PORT}/example`)
 })

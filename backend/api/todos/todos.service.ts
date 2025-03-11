@@ -1,5 +1,5 @@
 import {dbService} from "../../services/db/db.service";
-import {ITodo} from "../../globalTypes";
+import {ITodo, IUser} from "../../globalTypes";
 
 
 export async function getAll(){
@@ -7,6 +7,14 @@ export async function getAll(){
     console.log(collection)
     return await collection.findAll()
 }
+
+export async function getTodoListByUserId(id: string){
+    const collection =  dbService.getCollection("todos")
+    const todoList = await collection.findAll() as ITodo[]
+    let todoByUser = todoList.filter(t=> t.userId == id)
+    return todoByUser
+}
+
 export async function getById(id: string){
     const todoById =  dbService.getCollection("todos")
     return await todoById.findById(id)
