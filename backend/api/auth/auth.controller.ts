@@ -3,6 +3,7 @@ import {IUser} from "../../globalTypes";
 import {dbService} from "../../services/db/db.service";
 import bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
+import {v4 as uuidv4} from "uuid";
 
 export async function userRegister(req: Request, res: Response, next: NextFunction) {
     try {
@@ -15,7 +16,7 @@ export async function userRegister(req: Request, res: Response, next: NextFuncti
         // let userId = Number(user.id) +1
         //console.log(`name: ${name} email: ${email} pass: ${password} `)
         let userDetail:IUser={
-            id: user.id,
+            id: uuidv4(),
             name,
             email,
             password: bcryptPassword,

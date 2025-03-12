@@ -1,5 +1,6 @@
 import {dbService} from "../../services/db/db.service";
 import {ITodo, IUser} from "../../globalTypes";
+import {Request, Response} from "express";
 
 
 export async function getAll(){
@@ -26,12 +27,34 @@ export async function create(todo: ITodo){
 }
 
 
-export async function update(id: string, newTodo: ITodo){
+export async function update(id: string,userId :string, newTodo: ITodo){
     const collection =  dbService.getCollection("todos")
+    const todoList = await collection.findAll() as ITodo[]
+    let todoById = todoList.find(t=> t.id === id) as ITodo
+    if(todoById.userId != userId)
+        throw new Error('You do not have permission to perform this action.');
     return await collection.update(id,newTodo)
 }
 
-export async function deleteTodo(id: string){
+export async function deleteTodo(id: string , userId: string){
     const collection =  dbService.getCollection("todos")
+    const todoList = await collection.findAll() as ITodo[]
+    let todoById = todoList.find(t=> t.id === id) as ITodo
+    if(todoById.userId != userId)
+        throw new Error('You do not have permission to perform this action.');
     return await collection.delete(id)
+}
+export async function deleteTodoByUserId(id: string) {
+    try {
+        const collection =  dbService.getCollection("todos")
+        const todoList = await collection.findAll() as ITodo[]
+        todoList.forEach(async (t)=> {
+            if(t.userId == id)
+                await collection.delete(t.id)
+        })
+        return { message: "Todos deleted by user id successfully" };
+    }
+    catch (err){
+       return{ err: 'Error to delete Todo by user id' }
+    }
 }

@@ -1,5 +1,7 @@
 import {getAll, getById,create,update,deleteUser} from "./users.service";
 import {Request, Response} from "express";
+import {deleteTodoByUserId} from "../todos/todos.service";
+
 
 export async function getAllUsers(req: Request, res: Response){
     try{
@@ -43,8 +45,9 @@ export async function updateUser(req: Request, res: Response){
 export async function deleteUserById(req: Request, res: Response){
     try{
         const {id} = req.params
-        const user = await deleteUser(id)
-        res.send(user)
+        const deletedUser = await deleteUser(id)
+        const deletedTodo = await deleteTodoByUserId(id)
+        res.send({deletedUser , deletedTodo})
     }
     catch (err){
         res.status(404).send({ err: 'Error to delete user' })
