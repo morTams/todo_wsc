@@ -6,7 +6,7 @@ import {IUser} from "../globalTypes";
 
 
 export async function usersMiddleware(req: Request, res: Response, next: NextFunction){
-    const requiredFields= ['id','name','email','password','isAdmin']
+    const requiredFields= ['name','email','password']
     const validate = validateObject(req.body,requiredFields)
     if(!validate)
         return res.status(401).json({message: "The new object does not contain all required fields."})

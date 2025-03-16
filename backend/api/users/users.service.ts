@@ -13,7 +13,7 @@ export async function create(user: IUser){
     const collection = dbService.getCollection("users")
     return await collection.create(user)
 }
-export async function update(id: string, user: IUser){
+export async function update(id: string, user: any){
     const collection = dbService.getCollection("users")
     return await collection.update(id, user)
 }

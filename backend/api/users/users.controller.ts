@@ -16,6 +16,8 @@ export async function getUserById(req: Request, res: Response){
     try{
         const {id} = req.params
         const user = await getById(id)
+        if(req.query.id!== id)
+            res.status(404).send({ err: 'You do not have permissions to this account.' })
         res.send(user)
     }
     catch (err){

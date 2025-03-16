@@ -35,18 +35,17 @@ export async function userRegister(req: Request, res: Response, next: NextFuncti
 
 export async function userLogin(req: Request, res: Response) {
     try {
-        const {name, password } = req.body
+        const {email, password } = req.body
         const collection = dbService.getCollection("users")
         const allUsers = await collection.findAll()
         const users = allUsers as IUser[]
-        let user = users.find(u=> u.name === name)
+        let user = users.find(u=> u.email === email)
         if(!user)
             return res.status(401).json({ message: "Invalid credentials" })
 
         const isMatch = await bcrypt.compare(password, user.password)
-        if (!isMatch) return res.status(401).json({ message: "Invalid credentials" })
-        let email = user.email
-        // @ts-ignore
+        if (!isMatch)
+            return res.status(401).json({ message: "Invalid credentials" })
         const token = jwt.sign({id: user.id ,email: email}, process.env.JWT_SECRET as string,{ expiresIn: "1h" })
         res.json({token})
     }

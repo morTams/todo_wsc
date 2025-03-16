@@ -41,7 +41,7 @@ export async function deleteTodo(id: string , userId: string){
     const todoList = await collection.findAll() as ITodo[]
     let todoById = todoList.find(t=> t.id === id) as ITodo
     if(todoById.userId != userId)
-        throw new Error('You do not have permission to perform this action.');
+        throw new Error('You do not have permission to perform this action.')
     return await collection.delete(id)
 }
 export async function deleteTodoByUserId(id: string) {
@@ -52,9 +52,9 @@ export async function deleteTodoByUserId(id: string) {
             if(t.userId == id)
                 await collection.delete(t.id)
         })
-        return { message: "Todos deleted by user id successfully" };
+        return { message: "Todos deleted by user id successfully" }
     }
     catch (err){
-       return{ err: 'Error to delete Todo by user id' }
+        throw new Error('Error to delete Todo by user id' )
     }
 }

@@ -34,7 +34,7 @@ export async function createTodo(req: Request, res: Response) {
         const userId= req.query.id as string
         const data = req.body
         const newTodo:ITodo={
-            id: uuidv4(),
+            id: "",
             title:data.title,
             description: data.description,
             category: data.category,
